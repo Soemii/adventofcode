@@ -39,7 +39,7 @@ func (Challenge20231001) Execute(rawFile string) error {
 			return ' '
 		}
 		if y >= len(split) || x >= len(split[0]) {
-
+			return ' '
 		}
 		return rune(split[y][x])
 	}

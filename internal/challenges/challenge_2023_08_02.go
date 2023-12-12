@@ -49,7 +49,7 @@ func (Challenge20230802) Execute(rawFile string) error {
 	lines = lines[2:]
 	locationMap := make(map[string]Values)
 
-	compile, err := regexp.Compile("(\\w\\w\\w) = \\((\\w\\w\\w), (\\w\\w\\w)\\)")
+	compile, err := regexp.Compile(`(\w\w\w) = \((\w\w\w), (\w\w\w)\)`)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (Challenge20230802) Execute(rawFile string) error {
 		}
 	}
 	startingLocation := make([]string, 0)
-	for s, _ := range locationMap {
+	for s := range locationMap {
 		if strings.HasSuffix(s, "A") {
 			startingLocation = append(startingLocation, s)
 		}
@@ -87,58 +87,3 @@ func (Challenge20230802) Execute(rawFile string) error {
 	log.Println(LCM(endSteps...))
 	return nil
 }
-
-/*
-	allOnZ := func(s []string) bool {
-		for _, s2 := range s {
-			if s2[2] != 'Z' {
-				return false
-			}
-		}
-		return true
-	}
-	type Values struct {
-		Left  string
-		Right string
-	}
-	lines := strings.Split(rawFile, "\r\n")
-	order := lines[0]
-	lines = lines[2:]
-	locationMap := make(map[string]Values)
-
-	compile, err := regexp.Compile("(\\w\\w\\w) = \\((\\w\\w\\w), (\\w\\w\\w)\\)")
-	if err != nil {
-		return err
-	}
-	for _, line := range lines {
-		submatch := compile.FindStringSubmatch(line)
-		locationMap[submatch[1]] = Values{
-			Left:  submatch[2],
-			Right: submatch[3],
-		}
-	}
-	startingLocation := make([]string, 0)
-	for s, _ := range locationMap {
-		if strings.HasSuffix(s, "A") {
-			startingLocation = append(startingLocation, s)
-		}
-	}
-	i := 0
-	for {
-		orderIndex := i % len(order)
-		direction := order[orderIndex]
-		for i2, s := range startingLocation {
-			if direction == 'R' {
-				startingLocation[i2] = locationMap[s].Right
-			} else {
-				startingLocation[i2] = locationMap[s].Left
-			}
-		}
-		i++
-		if allOnZ(startingLocation) {
-			break
-		}
-	}
-	log.Println(i)
-	return nil
-*/

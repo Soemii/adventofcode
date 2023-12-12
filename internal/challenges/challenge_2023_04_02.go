@@ -35,7 +35,7 @@ func (Challenge20230402) Execute(rawFile string) error {
 	}
 	length := len(strings.Split(rawFile, "\r\n"))
 	cardsAmount := make([]int, length)
-	for i, _ := range cardsAmount {
+	for i := range cardsAmount {
 		cardsAmount[i] = 1
 	}
 
