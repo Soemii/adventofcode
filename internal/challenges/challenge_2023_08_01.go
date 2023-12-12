@@ -30,7 +30,7 @@ func (Challenge20230801) Execute(rawFile string) error {
 	lines = lines[2:]
 	locationMap := make(map[string]Values)
 
-	compile, err := regexp.Compile("(\\w\\w\\w) = \\((\\w\\w\\w), (\\w\\w\\w)\\)")
+	compile, err := regexp.Compile(`(\w\w\w) = \((\w\w\w), (\w\w\w)\)`)
 	if err != nil {
 		return err
 	}
