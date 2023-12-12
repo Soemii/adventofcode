@@ -1,7 +1,6 @@
 package challenges
 
 import (
-	"fmt"
 	"log"
 	"strings"
 )
@@ -25,42 +24,74 @@ func (Challenge20231001) Execute(rawFile string) error {
 		X int
 		Y int
 	}
-	//locationMap := map[string]Location{
-	//	"|": {X: 0, Y: 1},
-	//	"-": {X: 1, Y: 0},
-	//	"L": {X: -1, Y: -1},
-	//	"7": {X: 0, Y: 1},
-	//	"J": {X: 0, Y: -1},
-	//	"F": {X: -1, Y: 1},
-	//}
-	split := strings.Split(rawFile, "\r\n")
-	getCharAt := func(x, y int) rune {
-		if x < 0 || y < 0 {
-			return ' '
-		}
-		if y >= len(split) || x >= len(split[0]) {
-			return ' '
-		}
-		return rune(split[y][x])
+	locationMap := map[rune][]Location{
+		'|': {{X: 0, Y: 1}, {X: 0, Y: -1}},
+		'-': {{X: 1, Y: 0}, {X: -1, Y: 0}},
+		'L': {{X: 0, Y: -1}, {X: 1, Y: 0}},
+		'7': {{X: 0, Y: 1}, {X: -1, Y: 0}},
+		'J': {{X: 0, Y: -1}, {X: -1, Y: 0}},
+		'F': {{X: 1, Y: 0}, {X: 0, Y: 1}},
 	}
-	sIndex := strings.IndexRune(strings.ReplaceAll(rawFile, "\r\n", ""), 'S')
-	y := sIndex / len(split)
-	x := sIndex % len(split)
-	//locations := make([]Location, 0)
-	//lastX := x
-	//lastY := y
-	for i := -1; i < 2; i++ {
-		for j := -1; j < 2; j++ {
-			if j == 0 && i == 0 {
-				continue
+	split := strings.Split(rawFile, "\n")
+	getCharAt := func(location Location) rune {
+		if location.X < 0 || location.Y < 0 {
+			return ' '
+		}
+		if location.Y >= len(split) || location.X >= len(split[0]) {
+			return ' '
+		}
+		return rune(split[location.Y][location.X])
+	}
+	getConnectedLocations := func(char rune, location Location) (Location, Location) {
+		l, ok := locationMap[char]
+		if !ok {
+			return Location{}, Location{}
+		}
+		firstLocation := Location{
+			X: location.X + l[0].X,
+			Y: location.Y + l[0].Y,
+		}
+		secondLocation := Location{
+			X: location.X + l[1].X,
+			Y: location.Y + l[1].Y,
+		}
+		return firstLocation, secondLocation
+	}
+	sIndex := strings.IndexRune(strings.ReplaceAll(rawFile, "\n", ""), 'S')
+	y := sIndex / len(split[0])
+	x := sIndex % len(split[0])
+	sLocation := Location{x, y}
+	var startingLocation Location
+	for _, v := range []Location{{1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
+		currentLocation := Location{x + v.X, y + v.Y}
+		char := getCharAt(currentLocation)
+		if char != ' ' && char != '.' {
+			l, l2 := getConnectedLocations(char, currentLocation)
+			if l == sLocation {
+				startingLocation = currentLocation
+				break
+			} else if l2 == sLocation {
+				startingLocation = currentLocation
+				break
 			}
-			fmt.Print(string(getCharAt(y+i, x+j)))
 		}
-		fmt.Println()
 	}
-	//for split[y][x] != 'S' {
-	//
-	//}
-	log.Println(y, x)
+	locations := make([]Location, 0)
+	locations = append(locations, startingLocation)
+	lastLocation := sLocation
+	for getCharAt(startingLocation) != 'S' {
+		r := getCharAt(startingLocation)
+		l, l2 := getConnectedLocations(r, startingLocation)
+		var newLocation Location
+		if l != lastLocation {
+			newLocation = l
+		} else if l2 != lastLocation {
+			newLocation = l2
+		}
+		lastLocation = startingLocation
+		startingLocation = newLocation
+		locations = append(locations, newLocation)
+	}
+	log.Println(len(locations) / 2)
 	return nil
 }
