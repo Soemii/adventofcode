@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func NewChallenge201501() adventofcode.Challenge[[]rune, []rune] {
+func NewChallenge201501() adventofcode.Challenge {
 	return Challenge20150101{}
 }
 
@@ -21,15 +21,7 @@ func (Challenge20150101) GetDay() int {
 	return 01
 }
 
-func (c Challenge20150101) PrepareFirst(rawfile string) []rune {
-	return []rune(rawfile)
-}
-
-func (c Challenge20150101) PrepareSecond(rawfile string) []rune {
-	return c.PrepareFirst(rawfile)
-}
-
-func (c Challenge20150101) ExecuteFirst(input []rune) (string, error) {
+func (c Challenge20150101) ExecuteFirst(input string) (string, error) {
 	i := 0
 	for _, r := range input {
 		if r == '(' {
@@ -41,7 +33,7 @@ func (c Challenge20150101) ExecuteFirst(input []rune) (string, error) {
 	return strconv.Itoa(i), nil
 }
 
-func (c Challenge20150101) ExecuteSecond(input []rune) (string, error) {
+func (c Challenge20150101) ExecuteSecond(input string) (string, error) {
 	i := 0
 	for j, r := range input {
 		if r == '(' {

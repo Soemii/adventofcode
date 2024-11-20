@@ -7,27 +7,28 @@ import (
 	"strings"
 )
 
-func NewChallenge201502() adventofcode.Challenge[[]string, []string] {
+func NewChallenge201502() adventofcode.Challenge {
 	return Challenge201502{}
 }
 
 type Challenge201502 struct{}
 
-func (c Challenge201502) PrepareFirst(rawfile string) []string {
-	return strings.Split(rawfile, "\r\n")
-}
-
-func (c Challenge201502) PrepareSecond(rawfile string) []string {
-	return c.PrepareFirst(rawfile)
-}
-
-func (c Challenge201502) ExecuteFirst(input []string) (string, error) {
+func (c Challenge201502) ExecuteFirst(input string) (string, error) {
 	sum := 0
-	for _, s := range input {
+	for _, s := range strings.Split(input, "\r\n") {
 		split := strings.Split(s, "x")
-		l, _ := strconv.Atoi(split[0])
-		w, _ := strconv.Atoi(split[1])
-		h, _ := strconv.Atoi(split[2])
+		l, err := strconv.Atoi(split[0])
+		if err != nil {
+			return "", err
+		}
+		w, err := strconv.Atoi(split[1])
+		if err != nil {
+			return "", err
+		}
+		h, err := strconv.Atoi(split[2])
+		if err != nil {
+			return "", err
+		}
 		size := 2*l*w + 2*w*h + 2*h*l
 		min := int(math.Min(float64(l*w), math.Min(float64(w*h), float64(h*l))))
 		sum += size + min
@@ -35,13 +36,22 @@ func (c Challenge201502) ExecuteFirst(input []string) (string, error) {
 	return strconv.Itoa(sum), nil
 }
 
-func (c Challenge201502) ExecuteSecond(input []string) (string, error) {
+func (c Challenge201502) ExecuteSecond(input string) (string, error) {
 	sum := 0
-	for _, s := range input {
+	for _, s := range strings.Split(input, "\r\n") {
 		split := strings.Split(s, "x")
-		l, _ := strconv.Atoi(split[0])
-		w, _ := strconv.Atoi(split[1])
-		h, _ := strconv.Atoi(split[2])
+		l, err := strconv.Atoi(split[0])
+		if err != nil {
+			return "", err
+		}
+		w, err := strconv.Atoi(split[1])
+		if err != nil {
+			return "", err
+		}
+		h, err := strconv.Atoi(split[2])
+		if err != nil {
+			return "", err
+		}
 		size := l * w * h
 		min := int(math.Min(float64(l+w), math.Min(float64(w+h), float64(h+l)))) * 2
 		sum += size + min
