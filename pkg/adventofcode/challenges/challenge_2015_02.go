@@ -15,7 +15,7 @@ type Challenge201502 struct{}
 
 func (c Challenge201502) ExecuteFirst(input string) (string, error) {
 	sum := 0
-	for _, s := range strings.Split(input, "\r\n") {
+	for _, s := range strings.Split(input, "\n") {
 		split := strings.Split(s, "x")
 		l, err := strconv.Atoi(split[0])
 		if err != nil {
@@ -38,7 +38,7 @@ func (c Challenge201502) ExecuteFirst(input string) (string, error) {
 
 func (c Challenge201502) ExecuteSecond(input string) (string, error) {
 	sum := 0
-	for _, s := range strings.Split(input, "\r\n") {
+	for _, s := range strings.Split(input, "\n") {
 		split := strings.Split(s, "x")
 		l, err := strconv.Atoi(split[0])
 		if err != nil {
