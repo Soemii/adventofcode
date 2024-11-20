@@ -36,6 +36,7 @@ func main() {
 			AsChallenge(challenges.NewChallenge202305),
 			AsChallenge(challenges.NewChallenge202306),
 			AsChallenge(challenges.NewChallenge202307),
+			AsChallenge(challenges.NewChallenge202308),
 		),
 	).Run()
 
