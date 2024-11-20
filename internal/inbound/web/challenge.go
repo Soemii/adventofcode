@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func NewChallengeHandler(challenges []adventofcode.Challenge) Route {
@@ -68,6 +69,10 @@ func (c challengeHandler) ServeHTTP(writer http.ResponseWriter, request *http.Re
 		return
 	}
 	input := request.FormValue("input")
+	found := true
+	for found {
+		input, found = strings.CutSuffix(input, "\n")
+	}
 	first, err := challenge.ExecuteFirst(input)
 	if err != nil {
 		err = temp.ExecuteTemplate(writer, "error.html", err.Error())
