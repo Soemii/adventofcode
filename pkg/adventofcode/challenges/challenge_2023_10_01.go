@@ -2,7 +2,6 @@ package challenges
 
 import (
 	"github.com/Soemii/AdventOfCode/pkg/adventofcode"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -34,7 +33,7 @@ func (c Challenge202310) ExecuteFirst(input string) (string, error) {
 		'J': {{X: 0, Y: -1}, {X: -1, Y: 0}},
 		'F': {{X: 1, Y: 0}, {X: 0, Y: 1}},
 	}
-	split := strings.Split(rawFile, "\n")
+	split := strings.Split(input, "\n")
 	getCharAt := func(location Location) rune {
 		if location.X < 0 || location.Y < 0 {
 			return ' '
@@ -59,7 +58,7 @@ func (c Challenge202310) ExecuteFirst(input string) (string, error) {
 		}
 		return firstLocation, secondLocation
 	}
-	sIndex := strings.IndexRune(strings.ReplaceAll(rawFile, "\n", ""), 'S')
+	sIndex := strings.IndexRune(strings.ReplaceAll(input, "\n", ""), 'S')
 	y := sIndex / len(split[0])
 	x := sIndex % len(split[0])
 	sLocation := Location{x, y}
