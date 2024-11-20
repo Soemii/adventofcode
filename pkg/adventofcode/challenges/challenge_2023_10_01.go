@@ -1,25 +1,27 @@
 package challenges
 
 import (
+	"github.com/Soemii/AdventOfCode/pkg/adventofcode"
 	"log"
+	"strconv"
 	"strings"
 )
 
-type Challenge20231001 struct{}
+func NewChallenge202310() adventofcode.Challenge {
+	return Challenge202310{}
+}
 
-func (Challenge20231001) GetYear() int {
+type Challenge202310 struct{}
+
+func (Challenge202310) GetYear() int {
 	return 2023
 }
 
-func (Challenge20231001) GetDay() int {
+func (Challenge202310) GetDay() int {
 	return 10
 }
 
-func (Challenge20231001) GetChallenge() int {
-	return 01
-}
-
-func (Challenge20231001) Execute(rawFile string) error {
+func (c Challenge202310) ExecuteFirst(input string) (string, error) {
 	type Location struct {
 		X int
 		Y int
@@ -92,6 +94,9 @@ func (Challenge20231001) Execute(rawFile string) error {
 		startingLocation = newLocation
 		locations = append(locations, newLocation)
 	}
-	log.Println(len(locations) / 2)
-	return nil
+	return strconv.Itoa(len(locations) / 2), nil
+}
+
+func (c Challenge202310) ExecuteSecond(input string) (string, error) {
+	return "Not Implemented", nil
 }
