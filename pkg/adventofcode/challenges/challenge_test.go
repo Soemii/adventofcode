@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"github.com/Soemii/AdventOfCode/pkg/adventofcode"
 	"os"
-	"slices"
+	"strconv"
 	"testing"
 )
 
 type TestData struct {
 	Expect    string
-	NotExpect []string
+	NotExpect []func(string string) bool
 	Finished  bool
 }
 
@@ -30,9 +30,11 @@ func ChallengeTest(t *testing.T, challenge adventofcode.Challenge, dataFirst Tes
 			t.Errorf("ExecuteFirst() error = %v", err)
 			return
 		}
-		if slices.Contains(dataFirst.NotExpect, result) {
-			t.Errorf("ExecuteFirst() not expected return value = %v", result)
-			return
+		for _, fun := range dataFirst.NotExpect {
+			if fun(result) {
+				t.Errorf("ExecuteFirst() not expected return value = %v", result)
+				return
+			}
 		}
 		if dataFirst.Expect != "" && dataFirst.Expect != result {
 			t.Errorf("ExecuteFirst() unexpected return value = %v", result)
@@ -47,11 +49,28 @@ func ChallengeTest(t *testing.T, challenge adventofcode.Challenge, dataFirst Tes
 		if err != nil {
 			t.Errorf("ExecuteSecond() error = %v", err)
 		}
-		if slices.Contains(dataSecond.NotExpect, result) {
-			t.Errorf("ExecuteSecond() not expected return value = %v", result)
+		for _, fun := range dataFirst.NotExpect {
+			if fun(result) {
+				t.Errorf("ExecuteSecond() not expected return value = %v", result)
+				return
+			}
 		}
 		if dataSecond.Expect != "" && dataSecond.Expect != result {
 			t.Errorf("ExecuteSecond() unexpected return value = %v", result)
 		}
 	})
+}
+
+func LowerThan(i int) func(string string) bool {
+	return func(string string) bool {
+		atoi, _ := strconv.Atoi(string)
+		return atoi >= i
+	}
+}
+
+func BiggerThan(i int) func(string string) bool {
+	return func(string string) bool {
+		atoi, _ := strconv.Atoi(string)
+		return atoi <= i
+	}
 }
