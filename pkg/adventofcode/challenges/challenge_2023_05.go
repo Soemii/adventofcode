@@ -1,27 +1,65 @@
 package challenges
 
 import (
-	"log"
+	"github.com/Soemii/AdventOfCode/pkg/adventofcode"
 	"math"
+	"sort"
 	"strconv"
 	"strings"
 )
 
-type Challenge20230502 struct{}
+func NewChallenge202305() adventofcode.Challenge {
+	return Challenge202305{}
+}
 
-func (Challenge20230502) GetYear() int {
+type Challenge202305 struct{}
+
+func (Challenge202305) GetYear() int {
 	return 2023
 }
 
-func (Challenge20230502) GetDay() int {
+func (Challenge202305) GetDay() int {
 	return 05
 }
 
-func (Challenge20230502) GetChallenge() int {
-	return 02
+func (c Challenge202305) ExecuteFirst(input string) (string, error) {
+	stringToInt := func(s []string) (ints []int) {
+		ints = make([]int, len(s))
+		for i, s2 := range s {
+			atoi, _ := strconv.Atoi(strings.Trim(s2, " "))
+			ints[i] = atoi
+		}
+		return
+	}
+
+	mask := func(s []string, seeds []int) map[int]int {
+		m := make(map[int]int)
+		for _, s2 := range s {
+			ints := stringToInt(strings.Split(s2, " "))
+			for _, seed := range seeds {
+				if seed > ints[1] && seed < ints[1]+ints[2] {
+					m[seed] = ints[0] + seed - ints[1]
+				}
+			}
+		}
+		return m
+	}
+
+	split := strings.Split(input, "\n\n")
+	seeds := stringToInt(strings.Split(split[0][7:], " "))
+	for _, v := range split[1:] {
+		m := mask(strings.Split(v, "\n")[1:], seeds)
+		for i, seed := range seeds {
+			if vs, ok := m[seed]; ok {
+				seeds[i] = vs
+			}
+		}
+	}
+	sort.Ints(seeds)
+	return strconv.Itoa(seeds[0]), nil
 }
 
-func (Challenge20230502) Execute(rawFile string) error {
+func (c Challenge202305) ExecuteSecond(input string) (string, error) {
 	stringToInt := func(s []string) (ints []int) {
 		ints = make([]int, len(s))
 		for i, s2 := range s {
@@ -47,7 +85,7 @@ func (Challenge20230502) Execute(rawFile string) error {
 	generateBlocks := func(blocks []string) [][][]int {
 		generatedBlocks := make([][][]int, len(blocks))
 		for blockI, block := range blocks {
-			lines := strings.Split(block, "\r\n")
+			lines := strings.Split(block, "\n")
 			generatedBlocks[blockI] = make([][]int, len(lines)-1)
 			for lineI, line := range lines[1:] {
 				generatedBlocks[blockI][lineI] = stringToInt(strings.Split(line, " "))
@@ -56,7 +94,7 @@ func (Challenge20230502) Execute(rawFile string) error {
 		return generatedBlocks
 	}
 
-	split := strings.Split(rawFile, "\r\n\r\n")
+	split := strings.Split(input, "\n\n")
 	seeds := stringToInt(strings.Split(split[0][7:], " "))
 
 	blocks := generateBlocks(split[1:])
@@ -74,8 +112,6 @@ func (Challenge20230502) Execute(rawFile string) error {
 	for i := 0; i < len(seeds)/2; i++ {
 		sm := <-smallestChannel
 		smallest = int(math.Min(float64(smallest), float64(sm)))
-		log.Println("Current smallest:", smallest)
 	}
-	log.Println("Finished", smallest)
-	return nil
+	return strconv.Itoa(smallest), nil
 }
