@@ -40,6 +40,7 @@ func ChallengeTest(t *testing.T, challenge adventofcode.Challenge, dataFirst Tes
 			t.Errorf("ExecuteFirst() unexpected return value = %v", result)
 			return
 		}
+		t.Logf("Result: %s", result)
 	})
 	t.Run(fmt.Sprintf("%d-%d-Second", challenge.GetYear(), challenge.GetDay()), func(t *testing.T) {
 		if !dataSecond.Finished {
@@ -58,6 +59,7 @@ func ChallengeTest(t *testing.T, challenge adventofcode.Challenge, dataFirst Tes
 		if dataSecond.Expect != "" && dataSecond.Expect != result {
 			t.Errorf("ExecuteSecond() unexpected return value = %v", result)
 		}
+		t.Logf("Result: %s", result)
 	})
 }
 
